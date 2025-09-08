@@ -1,8 +1,10 @@
 <Window xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vm="using:LunaPad.ViewModels"
+    xmlns:views="using:LunaPad.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="LunaPad.Views.MainWindow"
@@ -10,19 +12,16 @@
     Icon="/Assets/avalonia-logo.ico"
     Title="LunaPad">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at
-        App.axaml.cs) -->
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
-
-    <AvaloniaEdit:TextEditor Name="Editor"
-        FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
-        HorizontalScrollBarVisibility="Auto"
-        VerticalScrollBarVisibility="Visible"
-        FontWeight="Light"
-        FontSize="14"
-        Watermark="Just code, just live, just love.">
-    </AvaloniaEdit:TextEditor>
+    <TabControl ItemsSource="{Binding EditorTabs}" SelectedItem="{Binding SelectedTab}">
+        <TabControl.ItemTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding EditorTitle}" />
+            </DataTemplate>
+        </TabControl.ItemTemplate>
+        <TabControl.ContentTemplate>
+            <DataTemplate>
+                <views:EditorTab />
+            </DataTemplate>
+        </TabControl.ContentTemplate>
+    </TabControl>
 </Window>
