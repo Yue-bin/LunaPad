@@ -9,13 +9,37 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="LunaPad.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
+    Name="mainWindow"
     Icon="/Assets/avalonia-logo.ico"
     Title="LunaPad">
 
     <TabControl ItemsSource="{Binding EditorTabs}" SelectedItem="{Binding SelectedTab}">
+        <TabControl.Styles>
+            <Style Selector="TabStrip">
+                <Setter Property="Template">
+                    <ControlTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <ItemsPresenter Grid.Column="0" />
+                            <Button Command="{Binding AddNewTab}"
+                                    Content="+" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                    Margin="5,0" MinWidth="20" MinHeight="20" Background="Red" Grid.Column="1" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter>
+            </Style>
+        </TabControl.Styles>
         <TabControl.ItemTemplate>
             <DataTemplate>
-                <TextBlock Text="{Binding EditorTitle}" />
+                <Grid ColumnDefinitions="5*,*">
+                    <TextBlock Text="{Binding EditorTitle}" Grid.Column="0" />
+                    <Button Command="{Binding CloseMe}"
+                        CommandParameter="{Binding .}"
+                        Content="X" Grid.Column="1" />
+                </Grid>
             </DataTemplate>
         </TabControl.ItemTemplate>
         <TabControl.ContentTemplate>

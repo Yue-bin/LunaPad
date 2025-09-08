@@ -1,8 +1,10 @@
 using System;
 using AvaloniaEdit;
+using AvaloniaEdit.Editing;
 using AvaloniaEdit.TextMate;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using TextMateSharp.Grammars;
 
 namespace LunaPad.ViewModels;
@@ -17,6 +19,9 @@ public partial class EditorTabViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool _isTextMateInstalled;
+
+    [ObservableProperty]
+    private string? _filePath;
 
     private RegistryOptions _registryOptions;
     private TextMate.Installation? _textMateInstallation;
@@ -62,6 +67,30 @@ public partial class EditorTabViewModel : ViewModelBase
         IsTextMateInstalled = true;
     }
 
+    [RelayCommand]
+    public void CopyMouseCommand(TextArea textArea)
+    {
+        ApplicationCommands.Copy.Execute(null, textArea);
+    }
+
+    [RelayCommand]
+    public void CutMouseCommand(TextArea textArea)
+    {
+        ApplicationCommands.Cut.Execute(null, textArea);
+    }
+
+    [RelayCommand]
+    public void PasteMouseCommand(TextArea textArea)
+    {
+        ApplicationCommands.Paste.Execute(null, textArea);
+    }
+
+    [RelayCommand]
+    public void SelectAllMouseCommand(TextArea textArea)
+    {
+        ApplicationCommands.SelectAll.Execute(null, textArea);
+    }
+
     public string? Content
     {
         get => TextEditor?.Document?.Text;
@@ -73,4 +102,24 @@ public partial class EditorTabViewModel : ViewModelBase
             }
         }
     }
+    [RelayCommand]
+    public void CloseMe()
+    {
+        // 发送关闭标签页消息
+        WeakReferenceMessenger.Default.Send(new CloseTabMessage(this));
+    }
+    [RelayCommand]
+    public void AddNewTab()
+    {
+        // 发送添加新标签页消息
+        WeakReferenceMessenger.Default.Send(new AddTabMessage());
+    }
+
+    public bool IsModified => TextEditor?.IsModified ?? false;
+
+    public bool IsEmpty => string.IsNullOrEmpty(Content);
+
+    public bool IsNewFile => string.IsNullOrEmpty(FilePath);
+
+    public bool IsIgnorable => IsEmpty && IsNewFile && !IsModified;
 }
