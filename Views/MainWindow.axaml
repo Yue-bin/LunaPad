@@ -17,8 +17,12 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
-    <AvaloniaEdit:TextEditor Text="Hello AvaloniaEdit!"
-        ShowLineNumbers="True"
-        FontFamily="Cascadia Code,Consolas,Menlo,Monospace" />
-
+    <AvaloniaEdit:TextEditor Name="Editor"
+        FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
+        HorizontalScrollBarVisibility="Auto"
+        VerticalScrollBarVisibility="Visible"
+        FontWeight="Light"
+        FontSize="14"
+        Watermark="Just code, just live, just love.">
+    </AvaloniaEdit:TextEditor>
 </Window>

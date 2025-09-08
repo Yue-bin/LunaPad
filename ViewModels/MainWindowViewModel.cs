@@ -1,6 +1,9 @@
-﻿namespace LunaPad.ViewModels;
+﻿using AvaloniaEdit;
+using AvaloniaEdit.TextMate;
+using TextMateSharp.Grammars;
+
+namespace LunaPad.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public string Greeting { get; } = "Welcome to Avalonia!";
 }
