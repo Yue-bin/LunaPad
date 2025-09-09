@@ -37,7 +37,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private int _newTabCounter = 2;
 
     [RelayCommand]
-    private void AddNewTab()
+    public void AddNewTab()
     {
         var newTabNumber = _newTabCounter++;
         var newTab = new EditorTabViewModel { EditorTitle = $"Untitled-{newTabNumber}" };

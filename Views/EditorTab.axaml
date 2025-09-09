@@ -4,10 +4,42 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+    xmlns:editing="clr-namespace:AvaloniaEdit.Editing;assembly=AvaloniaEdit"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="LunaPad.Views.EditorTab"
     x:DataType="vm:EditorTabViewModel">
 
-    <ContentControl Content="{Binding TextEditor}" />
+    <AvaloniaEdit:TextEditor Name="Editor"
+        Document="{Binding Document}"
+        FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
+        HorizontalScrollBarVisibility="Auto"
+        VerticalScrollBarVisibility="Visible"
+        FontWeight="Light"
+        FontSize="14"
+        ShowLineNumbers="True"
+        Watermark="Just code, just live, just love.">
+        <AvaloniaEdit:TextEditor.ContextFlyout>
+            <MenuFlyout>
+                <MenuItem Header="复制" InputGesture="ctrl+C"
+                    Command="{Binding CopyMouseCommandCommand}"
+                    CommandParameter="{Binding #Editor.TextArea}"></MenuItem>
+                <MenuItem Header="剪切" InputGesture="ctrl+X"
+                    Command="{Binding CutMouseCommandCommand}"
+                    CommandParameter="{Binding #Editor.TextArea}"></MenuItem>
+                <MenuItem Header="粘贴" InputGesture="ctrl+V"
+                    Command="{Binding PasteMouseCommandCommand}"
+                    CommandParameter="{Binding #Editor.TextArea}"></MenuItem>
+                <MenuItem Header="-" />
+                <MenuItem Header="全选" InputGesture="ctrl+A"
+                    Command="{Binding SelectAllMouseCommandCommand}"
+                    CommandParameter="{Binding #Editor.TextArea}"></MenuItem>
+            </MenuFlyout>
+        </AvaloniaEdit:TextEditor.ContextFlyout>
+        <AvaloniaEdit:TextEditor.Styles>
+            <Style Selector="editing|LineNumberMargin">
+                <Setter Property="MinWidthInDigits" Value="3" />
+            </Style>
+        </AvaloniaEdit:TextEditor.Styles>
+    </AvaloniaEdit:TextEditor>
 
 </Views>

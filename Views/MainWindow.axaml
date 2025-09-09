@@ -13,39 +13,57 @@
     Icon="/Assets/avalonia-logo.ico"
     Title="LunaPad">
 
-    <TabControl ItemsSource="{Binding EditorTabs}" SelectedItem="{Binding SelectedTab}">
-        <TabControl.Styles>
-            <Style Selector="TabStrip">
-                <Setter Property="Template">
-                    <ControlTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <ItemsPresenter Grid.Column="0" />
-                            <Button Command="{Binding AddNewTab}"
-                                    Content="+" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                    Margin="5,0" MinWidth="20" MinHeight="20" Background="Red" Grid.Column="1" />
+    <Grid>
+        <!-- 使用 Canvas 进行绝对定位 -->
+        <Grid>
+            <!-- TabControl 占据全部空间 -->
+            <TabControl ItemsSource="{Binding EditorTabs}"
+                SelectedItem="{Binding SelectedTab}">
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="5*,*">
+                            <TextBlock Text="{Binding EditorTitle}" Grid.Column="0" />
+                            <Button Command="{Binding CloseMe}"
+                                CommandParameter="{Binding .}"
+                                Grid.Column="1"
+                                Width="20" Height="20"
+                                Margin="5,0,0,0"
+                                Padding="0"
+                                VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Dismiss" FontSize="12" />
+                            </Button>
                         </Grid>
-                    </ControlTemplate>
-                </Setter>
-            </Style>
-        </TabControl.Styles>
-        <TabControl.ItemTemplate>
-            <DataTemplate>
-                <Grid ColumnDefinitions="5*,*">
-                    <TextBlock Text="{Binding EditorTitle}" Grid.Column="0" />
-                    <Button Command="{Binding CloseMe}"
-                        CommandParameter="{Binding .}"
-                        Content="X" Grid.Column="1" />
-                </Grid>
-            </DataTemplate>
-        </TabControl.ItemTemplate>
-        <TabControl.ContentTemplate>
-            <DataTemplate>
-                <views:EditorTab />
-            </DataTemplate>
-        </TabControl.ContentTemplate>
-    </TabControl>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+
+                <TabControl.ContentTemplate>
+                    <DataTemplate>
+                        <views:EditorTab />
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </TabControl>
+
+            <!-- 使用 Canvas 绝对定位加号按钮 -->
+            <Canvas>
+                <SplitButton Width="65"
+                    Height="30"
+                    Canvas.Right="5"
+                    Canvas.Top="5"
+                    Command="{Binding AddNewTab}"
+                    Padding="0">
+                    <ui:SymbolIcon Symbol="Add" />
+                    <SplitButton.Flyout>
+                        <MenuFlyout Placement="Bottom">
+                            <MenuItem Header="打开"
+                                InputGesture="Ctrl+O" />
+                            <MenuItem Header="保存"
+                                InputGesture="Ctrl+S" />
+                            <MenuItem Header="另存为"
+                                InputGesture="Ctrl+Shift+S" />
+                        </MenuFlyout>
+                    </SplitButton.Flyout>
+                </SplitButton>
+            </Canvas>
+        </Grid>
+    </Grid>
 </Window>
