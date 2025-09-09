@@ -3,6 +3,7 @@
     xmlns:vm="using:LunaPad.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     xmlns:editing="clr-namespace:AvaloniaEdit.Editing;assembly=AvaloniaEdit"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -22,17 +23,33 @@
             <MenuFlyout>
                 <MenuItem Header="复制" InputGesture="ctrl+C"
                     Command="{Binding CopyMouseCommandCommand}"
-                    CommandParameter="{Binding #Editor.TextArea}"></MenuItem>
+                    CommandParameter="{Binding #Editor.TextArea}">
+                    <MenuItem.Icon>
+                        <ui:SymbolIcon Symbol="Copy" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="剪切" InputGesture="ctrl+X"
                     Command="{Binding CutMouseCommandCommand}"
-                    CommandParameter="{Binding #Editor.TextArea}"></MenuItem>
+                    CommandParameter="{Binding #Editor.TextArea}">
+                    <MenuItem.Icon>
+                        <ui:SymbolIcon Symbol="Cut" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="粘贴" InputGesture="ctrl+V"
                     Command="{Binding PasteMouseCommandCommand}"
-                    CommandParameter="{Binding #Editor.TextArea}"></MenuItem>
+                    CommandParameter="{Binding #Editor.TextArea}">
+                    <MenuItem.Icon>
+                        <ui:SymbolIcon Symbol="Paste" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="-" />
                 <MenuItem Header="全选" InputGesture="ctrl+A"
                     Command="{Binding SelectAllMouseCommandCommand}"
-                    CommandParameter="{Binding #Editor.TextArea}"></MenuItem>
+                    CommandParameter="{Binding #Editor.TextArea}">
+                    <MenuItem.Icon>
+                        <ui:SymbolIcon Symbol="SelectAll" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuFlyout>
         </AvaloniaEdit:TextEditor.ContextFlyout>
         <AvaloniaEdit:TextEditor.Styles>

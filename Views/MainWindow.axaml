@@ -10,7 +10,7 @@
     x:Class="LunaPad.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
     Name="mainWindow"
-    Icon="/Assets/avalonia-logo.ico"
+    Icon="/Assets/LunaPadIcon@0.5x.png"
     Title="LunaPad">
 
     <Grid>
@@ -55,11 +55,29 @@
                     <SplitButton.Flyout>
                         <MenuFlyout Placement="Bottom">
                             <MenuItem Header="打开"
-                                InputGesture="Ctrl+O" />
+                                InputGesture="Ctrl+O">
+                                <MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="OpenFile" />
+                                </MenuItem.Icon>
+                            </MenuItem>
                             <MenuItem Header="保存"
-                                InputGesture="Ctrl+S" />
+                                InputGesture="Ctrl+S">
+                                <MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="Save" />
+                                </MenuItem.Icon>
+                            </MenuItem>
                             <MenuItem Header="另存为"
-                                InputGesture="Ctrl+Shift+S" />
+                                InputGesture="Ctrl+Shift+S">
+                                <MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="SaveAs" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="-" />
+                            <MenuItem Header="关于">
+                                <MenuItem.Icon>
+                                    <ui:SymbolIcon Symbol="Help" />
+                                </MenuItem.Icon>
+                            </MenuItem>
                         </MenuFlyout>
                     </SplitButton.Flyout>
                 </SplitButton>
