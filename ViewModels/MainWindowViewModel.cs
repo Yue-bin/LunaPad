@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
-using AvaloniaEdit;
-using AvaloniaEdit.TextMate;
+using System.Linq;
+using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using TextMateSharp.Grammars;
 
 namespace LunaPad.ViewModels;
 
@@ -15,6 +15,16 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     public EditorTabViewModel? _selectedTab;
+    private readonly IFilePickerService _filePickerService;
+
+    [ObservableProperty]
+    private string? _selectedFilePath;
+    public static FilePickerFileType CSharpFile { get; } = new("C# File")
+    {
+        Patterns = new[] { "*.cs" },
+        AppleUniformTypeIdentifiers = new[] { "public.csharp-source" },
+        MimeTypes = new[] { "text/x-csharp", "text/plain" }
+    };
 
     private void CloseTab(EditorTabViewModel tab)
     {
@@ -44,13 +54,36 @@ public partial class MainWindowViewModel : ViewModelBase
         EditorTabs.Add(newTab);
         SelectedTab = newTab;
     }
-    public MainWindowViewModel()
+
+    public void OpenNewTabWithFile(string filePath)
     {
+        var newTab = new EditorTabViewModel(filePath);
+        EditorTabs.Add(newTab);
+        SelectedTab = newTab;
+    }
+
+    [RelayCommand]
+    public async Task OpenFileSelector()
+    {
+        var options = new FilePickerOpenOptions
+        {
+            Title = "选择一个C#文件",
+            AllowMultiple = false,
+            FileTypeFilter = new[] { CSharpFile, FilePickerFileTypes.All },
+        };
+        var files = await _filePickerService.OpenFilesAsync(options);
+        if (files.Any())
+        {
+            SelectedFilePath = files[0].TryGetLocalPath();
+        }
+        OpenNewTabWithFile(SelectedFilePath!);
+    }
+    public MainWindowViewModel(IFilePickerService filePickerService)
+    {
+        _filePickerService = filePickerService;
         EditorTabs = [
             new EditorTabViewModel { EditorTitle = "Untitled-1" }
         ];
-        AddNewTab();
-        AddNewTab();
         SelectedTab = EditorTabs[0];        // 注册接收关闭标签页消息
         Messenger.Register<CloseTabMessage>(this, (recipient, message) =>
         {

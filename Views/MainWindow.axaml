@@ -55,7 +55,8 @@
                     <SplitButton.Flyout>
                         <MenuFlyout Placement="Bottom">
                             <MenuItem Header="打开"
-                                InputGesture="Ctrl+O">
+                                InputGesture="Ctrl+O"
+                                Command="{Binding OpenFileSelector}">
                                 <MenuItem.Icon>
                                     <ui:SymbolIcon Symbol="OpenFile" />
                                 </MenuItem.Icon>
