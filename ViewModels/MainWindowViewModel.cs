@@ -116,15 +116,19 @@ public partial class MainWindowViewModel : ViewModelBase
             AllowMultiple = false,
             FileTypeFilter = new[] { CSharpFile, FilePickerFileTypes.All },
         };
-        var files = await _filePickerService.ExecuteOnStorageProvider<IStorageFile[]>(
-            async provider => (await provider.OpenFilePickerAsync(options)).ToArray(),
-            Array.Empty<IStorageFile>());
+        var file = await _filePickerService.ExecuteOnStorageProvider<IStorageFile?>(
+            async provider =>
+            {
+                var files = await provider.OpenFilePickerAsync(options);
+                return files.FirstOrDefault();
+            },
+            null);
         string? selectedFilePath = null;
-        if (files.Any())
+        if (file != null)
         {
-            selectedFilePath = files[0].TryGetLocalPath();
+            selectedFilePath = file.TryGetLocalPath();
+            AddNewTabWithFile(selectedFilePath!);
         }
-        AddNewTabWithFile(selectedFilePath!);
     }
 
     [RelayCommand]
