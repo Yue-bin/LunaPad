@@ -56,19 +56,21 @@
                         <MenuFlyout Placement="Bottom">
                             <MenuItem Header="打开"
                                 InputGesture="Ctrl+O"
-                                Command="{Binding OpenFileSelector}">
+                                Command="{Binding OpenFile}">
                                 <MenuItem.Icon>
                                     <ui:SymbolIcon Symbol="OpenFile" />
                                 </MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="保存"
-                                InputGesture="Ctrl+S">
+                                InputGesture="Ctrl+S"
+                                Command="{Binding SaveFile}">
                                 <MenuItem.Icon>
                                     <ui:SymbolIcon Symbol="Save" />
                                 </MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="另存为"
-                                InputGesture="Ctrl+Shift+S">
+                                InputGesture="Ctrl+Shift+S"
+                                Command="{Binding SaveFileAs}">
                                 <MenuItem.Icon>
                                     <ui:SymbolIcon Symbol="SaveAs" />
                                 </MenuItem.Icon>

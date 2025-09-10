@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -11,18 +12,17 @@ public partial class MainWindow : Window, IFilePickerService
     {
         InitializeComponent();
     }
-    public async Task<IReadOnlyList<IStorageFile>> OpenFilesAsync(FilePickerOpenOptions options)
+    // 在你的 MainWindow.axaml.cs 中添加这个私有帮助方法
+    public async Task<TResult> ExecuteOnStorageProvider<TResult>(
+        Func<IStorageProvider, Task<TResult>> action,
+        TResult defaultValue)
     {
         var topLevel = GetTopLevel(this);
-        if (topLevel is null) return System.Array.Empty<IStorageFile>();
+        if (topLevel?.StorageProvider is null)
+        {
+            return defaultValue;
+        }
 
-        return await topLevel.StorageProvider.OpenFilePickerAsync(options);
-    }
-    public async Task<IStorageFile?> SaveFileAsync(FilePickerSaveOptions options)
-    {
-        var topLevel = GetTopLevel(this);
-        if (topLevel is null) return null;
-
-        return await topLevel.StorageProvider.SaveFilePickerAsync(options);
+        return await action(topLevel.StorageProvider);
     }
 }
