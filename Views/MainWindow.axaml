@@ -6,6 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+    xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+    xmlns:behaviors="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="LunaPad.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
@@ -22,77 +24,80 @@
     </Window.KeyBindings>
 
     <Grid>
-        <!-- 使用 Canvas 进行绝对定位 -->
-        <Grid>
-            <!-- TabControl 占据全部空间 -->
-            <TabControl ItemsSource="{Binding EditorTabs}"
-                SelectedItem="{Binding SelectedTab}">
-                <TabControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid ColumnDefinitions="5*,*">
-                            <TextBlock Text="{Binding EditorTitle}" Grid.Column="0" />
-                            <Button Command="{Binding CloseMe}"
-                                CommandParameter="{Binding .}"
-                                Grid.Column="1"
-                                Width="20" Height="20"
-                                Margin="5,0,0,0"
-                                Padding="0"
-                                VerticalAlignment="Center">
-                                <ui:SymbolIcon Symbol="Dismiss" FontSize="12" />
-                            </Button>
-                        </Grid>
-                    </DataTemplate>
-                </TabControl.ItemTemplate>
+        <Interaction.Behaviors>
+            <ContentControlFilesDropBehavior
+                Command="{Binding FileDrop}"
+                ContentDuringDrag="Drop files here"
+                BackgroundDuringDrag="{DynamicResource SystemAccentColor}" />
+        </Interaction.Behaviors>
+        <!-- TabControl 占据全部空间 -->
+        <TabControl ItemsSource="{Binding EditorTabs}"
+            SelectedItem="{Binding SelectedTab}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="5*,*">
+                        <TextBlock Text="{Binding EditorTitle}" Grid.Column="0" />
+                        <Button Command="{Binding CloseMe}"
+                            CommandParameter="{Binding .}"
+                            Grid.Column="1"
+                            Width="20" Height="20"
+                            Margin="5,0,0,0"
+                            Padding="0"
+                            VerticalAlignment="Center">
+                            <ui:SymbolIcon Symbol="Dismiss" FontSize="12" />
+                        </Button>
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
 
-                <TabControl.ContentTemplate>
-                    <DataTemplate>
-                        <views:EditorTab />
-                    </DataTemplate>
-                </TabControl.ContentTemplate>
-            </TabControl>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <views:EditorTab />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
 
-            <!-- 使用 Canvas 绝对定位加号按钮 -->
-            <Canvas>
-                <SplitButton Width="65"
-                    Height="30"
-                    Canvas.Right="5"
-                    Canvas.Top="5"
-                    Command="{Binding AddNewTab}"
-                    Padding="0">
-                    <ui:SymbolIcon Symbol="Add" />
-                    <SplitButton.Flyout>
-                        <MenuFlyout Placement="Bottom">
-                            <MenuItem Header="打开"
-                                InputGesture="Ctrl+O"
-                                Command="{Binding OpenFile}">
-                                <MenuItem.Icon>
-                                    <ui:SymbolIcon Symbol="OpenFile" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Header="保存"
-                                InputGesture="Ctrl+S"
-                                Command="{Binding SaveFile}">
-                                <MenuItem.Icon>
-                                    <ui:SymbolIcon Symbol="Save" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Header="另存为"
-                                InputGesture="Ctrl+Shift+S"
-                                Command="{Binding SaveFileAs}">
-                                <MenuItem.Icon>
-                                    <ui:SymbolIcon Symbol="SaveAs" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                            <MenuItem Header="-" />
-                            <MenuItem Header="关于">
-                                <MenuItem.Icon>
-                                    <ui:SymbolIcon Symbol="Help" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </MenuFlyout>
-                    </SplitButton.Flyout>
-                </SplitButton>
-            </Canvas>
-        </Grid>
+        <!-- 使用 Canvas 绝对定位加号按钮 -->
+        <Canvas>
+            <SplitButton Width="65"
+                Height="30"
+                Canvas.Right="5"
+                Canvas.Top="5"
+                Command="{Binding AddNewTab}"
+                Padding="0">
+                <ui:SymbolIcon Symbol="Add" />
+                <SplitButton.Flyout>
+                    <MenuFlyout Placement="Bottom">
+                        <MenuItem Header="打开"
+                            InputGesture="Ctrl+O"
+                            Command="{Binding OpenFile}">
+                            <MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="OpenFile" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="保存"
+                            InputGesture="Ctrl+S"
+                            Command="{Binding SaveFile}">
+                            <MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Save" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="另存为"
+                            InputGesture="Ctrl+Shift+S"
+                            Command="{Binding SaveFileAs}">
+                            <MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="SaveAs" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="-" />
+                        <MenuItem Header="关于">
+                            <MenuItem.Icon>
+                                <ui:SymbolIcon Symbol="Help" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuFlyout>
+                </SplitButton.Flyout>
+            </SplitButton>
+        </Canvas>
     </Grid>
 </Window>

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -197,6 +200,39 @@ public partial class MainWindowViewModel : ViewModelBase
                 Console.WriteLine($"保存文件失败: {ex.Message}");
                 // 如果直接保存失败（例如权限问题），也可以考虑触发“另存为”让用户选择新位置
                 await SaveFileAs();
+            }
+        }
+    }
+    [RelayCommand]
+    public void DragEnter(object? parameter)
+    {
+        if (parameter is not DragEventArgs args) return;
+        // 检查拖动的数据是否包含文件
+        if (args.Data.Contains(DataFormats.Files))
+        {
+            // 如果是文件，设置拖放效果为“复制”。
+            // 这会改变鼠标指针的样式，给用户明确的反馈。
+            args.DragEffects = DragDropEffects.Copy;
+        }
+        else
+        {
+            // 如果不是文件，则禁止拖放
+            args.DragEffects = DragDropEffects.None;
+        }
+    }
+
+    // 命令：处理文件被放下（Drop）的事件
+    [RelayCommand]
+    public void FileDrop(IEnumerable<IStorageItem> files)
+    {
+        if (files is null || !files.Any()) return;
+        // 遍历所有拖入的文件
+        foreach (var file in files)
+        {
+            var path = file.TryGetLocalPath();
+            if (path != null)
+            {
+                AddNewTabWithFile(path);
             }
         }
     }
