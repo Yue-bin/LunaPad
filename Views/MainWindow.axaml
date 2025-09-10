@@ -13,6 +13,14 @@
     Icon="/Assets/LunaPadIcon@0.5x.png"
     Title="LunaPad">
 
+    <!-- 由于Canvas上面绑定的快捷键不能用，在这里手动绑定一次 -->
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding AddNewTab}" />
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFile}" />
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveFile}" />
+        <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding SaveFileAs}" />
+    </Window.KeyBindings>
+
     <Grid>
         <!-- 使用 Canvas 进行绝对定位 -->
         <Grid>
