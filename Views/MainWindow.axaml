@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+    xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
     xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
     xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
     xmlns:behaviors="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
@@ -24,6 +25,18 @@
     </Window.KeyBindings>
 
     <Grid>
+        <Grid RowDefinitions="*,6*,*"
+            ColumnDefinitions="*,3*,*">
+            <Border Grid.Column="1"
+                Grid.Row="1"
+                Background="Transparent">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout>
+                        <TextBlock Text="关于" />
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </Border>
+        </Grid>
         <Interaction.Behaviors>
             <ContentControlFilesDropBehavior
                 Command="{Binding FileDrop}"
@@ -92,7 +105,7 @@
                         <MenuItem Header="-" />
                         <MenuItem Header="关于">
                             <MenuItem.Icon>
-                                <ui:SymbolIcon Symbol="Help" />
+                                <fluent:SymbolIcon Symbol="Info" />
                             </MenuItem.Icon>
                         </MenuItem>
                     </MenuFlyout>
