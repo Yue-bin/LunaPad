@@ -25,18 +25,6 @@
     </Window.KeyBindings>
 
     <Grid>
-        <Grid RowDefinitions="*,6*,*"
-            ColumnDefinitions="*,3*,*">
-            <Border Grid.Column="1"
-                Grid.Row="1"
-                Background="Transparent">
-                <FlyoutBase.AttachedFlyout>
-                    <Flyout>
-                        <TextBlock Text="关于" />
-                    </Flyout>
-                </FlyoutBase.AttachedFlyout>
-            </Border>
-        </Grid>
         <Interaction.Behaviors>
             <ContentControlFilesDropBehavior
                 Command="{Binding FileDrop}"
