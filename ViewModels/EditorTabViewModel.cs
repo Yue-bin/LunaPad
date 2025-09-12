@@ -1,8 +1,5 @@
 using System;
-using System.Diagnostics;
 using System.IO;
-using Avalonia.Controls;
-using Avalonia.Input;
 using AvaloniaEdit;
 using AvaloniaEdit.Document;
 using AvaloniaEdit.Editing;
@@ -34,7 +31,7 @@ public partial class EditorTabViewModel : ViewModelBase
         get => Document?.Text;
         set
         {
-            if (Document != null && value != null)
+            if (Document is not null && value is not null)
             {
                 Document.Text = value;
             }
@@ -74,7 +71,7 @@ public partial class EditorTabViewModel : ViewModelBase
     [RelayCommand]
     public void InstallTextMate(TextEditor editor)
     {
-        if (editor == null || _textMateInstallation != null) return;
+        if (editor is null || _textMateInstallation is not null) return;
 
         _textMateInstallation = editor.InstallTextMate(_registryOptions);
         _textMateInstallation.SetGrammar(_registryOptions.GetScopeByLanguageId(_registryOptions.GetLanguageByExtension(".cs").Id));

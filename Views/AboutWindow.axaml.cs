@@ -12,14 +12,14 @@ public partial class AboutWindow : Window
 
     private void CloseWindow(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        this.Close();
+        Close();
     }
 
     private void TitleBar_PointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
-            this.BeginMoveDrag(e);
+            BeginMoveDrag(e);
         }
     }
 }

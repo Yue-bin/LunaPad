@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using LunaPad.ViewModels;
 
@@ -11,7 +10,7 @@ public partial class EditorTab : UserControl
     {
         AvaloniaXamlLoader.Load(this);
         var editor = this.FindControl<AvaloniaEdit.TextEditor>("Editor");
-        if (editor != null)
+        if (editor is not null)
         {
             editor.AttachedToVisualTree += (s, e) =>
             {

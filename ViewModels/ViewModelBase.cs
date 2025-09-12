@@ -2,6 +2,4 @@
 
 namespace LunaPad.ViewModels;
 
-public class ViewModelBase : ObservableRecipient
-{
-}
+public class ViewModelBase : ObservableRecipient;

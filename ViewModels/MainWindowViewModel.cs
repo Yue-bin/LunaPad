@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +22,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     public EditorTabViewModel? _selectedTab;
     private MainWindow _mainWindow;
+    private int _newTabCounter = 2;
     private TopLevel? mainWindowTopLevel => Window.GetTopLevel(_mainWindow);
     public static FilePickerFileType CSharpFile { get; } = new("C# File")
     {
@@ -30,6 +30,25 @@ public partial class MainWindowViewModel : ViewModelBase
         AppleUniformTypeIdentifiers = new[] { "public.csharp-source" },
         MimeTypes = new[] { "text/x-csharp", "text/plain" }
     };
+
+    public MainWindowViewModel(MainWindow mainWindow)
+    {
+        _mainWindow = mainWindow;
+        EditorTabs = [
+            new EditorTabViewModel { EditorTitle = "Untitled-1" }
+        ];
+        SelectedTab = EditorTabs[0];
+        Messenger.Register<CloseTabMessage>(this, (recipient, message) =>
+        {
+            CloseTab(message.Tab);
+            message.Reply(true); // 确认消息已处理
+        });
+        Messenger.Register<AddTabMessage>(this, (recipient, message) =>
+        {
+            AddNewTab();
+            message.Reply(true); // 确认消息已处理
+        });
+    }
 
     private void CloseTab(EditorTabViewModel tab)
     {
@@ -47,17 +66,6 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
         EditorTabs.Remove(tab);
-    }
-
-    private int _newTabCounter = 2;
-
-    [RelayCommand]
-    public void AddNewTab()
-    {
-        var newTabNumber = _newTabCounter++;
-        var newTab = new EditorTabViewModel { EditorTitle = $"Untitled-{newTabNumber}" };
-        EditorTabs.Add(newTab);
-        SelectedTab = newTab;
     }
 
     public void AddNewTabWithFile(string filePath)
@@ -80,7 +88,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             // 使用 TryGetLocalPath 是安全的做法
             var path = file.TryGetLocalPath();
-            if (path != null)
+            if (path is not null)
             {
                 // 使用异步写入，避免UI阻塞
                 await File.WriteAllTextAsync(path, tab.Content ?? string.Empty);
@@ -112,6 +120,14 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
+    public void AddNewTab()
+    {
+        var newTabNumber = _newTabCounter++;
+        var newTab = new EditorTabViewModel { EditorTitle = $"Untitled-{newTabNumber}" };
+        EditorTabs.Add(newTab);
+        SelectedTab = newTab;
+    }
 
     [RelayCommand]
     public async Task OpenFile()
@@ -126,7 +142,7 @@ public partial class MainWindowViewModel : ViewModelBase
             ?? Task.FromResult<IReadOnlyList<IStorageFile>>(Array.Empty<IStorageFile>()));
         var file = files.FirstOrDefault();
         string? selectedFilePath = null;
-        if (file != null)
+        if (file is not null)
         {
             selectedFilePath = file.TryGetLocalPath();
             AddNewTabWithFile(selectedFilePath!);
@@ -136,7 +152,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     public async Task SaveFileAs(string title = "另存为")
     {
-        if (SelectedTab == null) return;
+        if (SelectedTab is null) return;
 
         var options = new FilePickerSaveOptions
         {
@@ -152,10 +168,10 @@ public partial class MainWindowViewModel : ViewModelBase
         };
         var file = await (mainWindowTopLevel?.StorageProvider?.SaveFilePickerAsync(options)
             ?? Task.FromResult<IStorageFile?>(null));
-        if (file != null)
+        if (file is not null)
         {
             var path = file.TryGetLocalPath();
-            if (path != null)
+            if (path is not null)
             {
                 await SaveContentToFileAsync(file, SelectedTab);
             }
@@ -165,7 +181,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     public async Task SaveFile()
     {
-        if (SelectedTab == null) return;
+        if (SelectedTab is null) return;
         // 检查当前Tab是否已经有关联的文件路径
         if (string.IsNullOrEmpty(SelectedTab.FilePath))
         {
@@ -179,7 +195,7 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 var file = await (mainWindowTopLevel?.StorageProvider?.TryGetFileFromPathAsync(SelectedTab.FilePath)
                     ?? Task.FromResult<IStorageFile?>(null));
-                if (file != null)
+                if (file is not null)
                 {
                     // 直接调用我们的辅助方法在原文件上写入
                     await SaveContentToFileAsync(file, SelectedTab);
@@ -227,7 +243,7 @@ public partial class MainWindowViewModel : ViewModelBase
         foreach (var file in files)
         {
             var path = file.TryGetLocalPath();
-            if (path != null)
+            if (path is not null)
             {
                 AddNewTabWithFile(path);
             }
@@ -239,24 +255,5 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         var aboutWindow = new AboutWindow();
         aboutWindow.ShowDialog(_mainWindow);
-    }
-
-    public MainWindowViewModel(MainWindow mainWindow)
-    {
-        _mainWindow = mainWindow;
-        EditorTabs = [
-            new EditorTabViewModel { EditorTitle = "Untitled-1" }
-        ];
-        SelectedTab = EditorTabs[0];
-        Messenger.Register<CloseTabMessage>(this, (recipient, message) =>
-        {
-            CloseTab(message.Tab);
-            message.Reply(true); // 确认消息已处理
-        });
-        Messenger.Register<AddTabMessage>(this, (recipient, message) =>
-        {
-            AddNewTab();
-            message.Reply(true); // 确认消息已处理
-        });
     }
 }
