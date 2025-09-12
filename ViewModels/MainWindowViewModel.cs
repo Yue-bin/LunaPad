@@ -5,11 +5,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using LunaPad.Views;
 
 namespace LunaPad.ViewModels;
 
@@ -20,7 +22,8 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     public EditorTabViewModel? _selectedTab;
-    private readonly IFilePickerService _filePickerService;
+    private MainWindow _mainWindow;
+    private TopLevel? mainWindowTopLevel => Window.GetTopLevel(_mainWindow);
     public static FilePickerFileType CSharpFile { get; } = new("C# File")
     {
         Patterns = new[] { "*.cs" },
@@ -119,13 +122,9 @@ public partial class MainWindowViewModel : ViewModelBase
             AllowMultiple = false,
             FileTypeFilter = new[] { CSharpFile, FilePickerFileTypes.All },
         };
-        var file = await _filePickerService.ExecuteOnStorageProvider<IStorageFile?>(
-            async provider =>
-            {
-                var files = await provider.OpenFilePickerAsync(options);
-                return files.FirstOrDefault();
-            },
-            null);
+        var files = await (mainWindowTopLevel?.StorageProvider?.OpenFilePickerAsync(options)
+            ?? Task.FromResult<IReadOnlyList<IStorageFile>>(Array.Empty<IStorageFile>()));
+        var file = files.FirstOrDefault();
         string? selectedFilePath = null;
         if (file != null)
         {
@@ -151,9 +150,8 @@ public partial class MainWindowViewModel : ViewModelBase
                 FilePickerFileTypes.All
             },
         };
-        var file = await _filePickerService.ExecuteOnStorageProvider<IStorageFile?>(
-            provider => provider.SaveFilePickerAsync(options),
-            null);
+        var file = await (mainWindowTopLevel?.StorageProvider?.SaveFilePickerAsync(options)
+            ?? Task.FromResult<IStorageFile?>(null));
         if (file != null)
         {
             var path = file.TryGetLocalPath();
@@ -179,9 +177,8 @@ public partial class MainWindowViewModel : ViewModelBase
             // 路径存在 -> 直接在原路径上保存
             try
             {
-                var file = await _filePickerService.ExecuteOnStorageProvider<IStorageFile?>(
-                    provider => provider.TryGetFileFromPathAsync(SelectedTab.FilePath),
-                    null);
+                var file = await (mainWindowTopLevel?.StorageProvider?.TryGetFileFromPathAsync(SelectedTab.FilePath)
+                    ?? Task.FromResult<IStorageFile?>(null));
                 if (file != null)
                 {
                     // 直接调用我们的辅助方法在原文件上写入
@@ -236,9 +233,9 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
     }
-    public MainWindowViewModel(IFilePickerService filePickerService)
+    public MainWindowViewModel(MainWindow mainWindow)
     {
-        _filePickerService = filePickerService;
+        _mainWindow = mainWindow;
         EditorTabs = [
             new EditorTabViewModel { EditorTitle = "Untitled-1" }
         ];
