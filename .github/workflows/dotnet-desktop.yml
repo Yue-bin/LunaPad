@@ -50,7 +50,7 @@ jobs:
 
     # 步骤 4: 构建项目
     - name: Build project
-      run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore
+      run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore -r win-x64 /p:PublishReadyToRun=true
 
     # 步骤 5: 运行单元测试 (建议取消注释并确保有测试项目)
     # - name: Execute unit tests
