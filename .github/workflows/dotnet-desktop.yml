@@ -28,7 +28,7 @@ jobs:
       # 你的应用程序名称（不含.exe），用于重命名输出文件
       PROJECT_NAME: LunaPad
       # 使用的 .NET 版本
-      DOTNET_VERSION: 9.0.x # 建议与你项目使用的 .NET 版本保持一致
+      DOTNET_VERSION: 8.0.x # 建议与你项目使用的 .NET 版本保持一致
 
     steps:
     # 步骤 1: 检出代码
