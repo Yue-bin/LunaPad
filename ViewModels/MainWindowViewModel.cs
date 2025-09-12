@@ -233,6 +233,14 @@ public partial class MainWindowViewModel : ViewModelBase
             }
         }
     }
+
+    [RelayCommand]
+    public void ShowAboutWindow()
+    {
+        var aboutWindow = new AboutWindow();
+        aboutWindow.ShowDialog(_mainWindow);
+    }
+
     public MainWindowViewModel(MainWindow mainWindow)
     {
         _mainWindow = mainWindow;

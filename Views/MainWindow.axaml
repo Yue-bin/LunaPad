@@ -91,7 +91,8 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="-" />
-                        <MenuItem Header="关于">
+                        <MenuItem Header="关于"
+                            Command="{Binding ShowAboutWindow}">
                             <MenuItem.Icon>
                                 <fluent:SymbolIcon Symbol="Info" />
                             </MenuItem.Icon>

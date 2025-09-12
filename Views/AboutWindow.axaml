@@ -2,12 +2,86 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
     xmlns:vm="using:LunaPad.ViewModels"
-    mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="150"
-    x:Class="LunaPad.Views.AboutWindow">
+    mc:Ignorable="d" d:DesignWidth="750" d:DesignHeight="450"
+    x:Class="LunaPad.Views.AboutWindow"
+    Width="750" Height="450"
+    Title="关于"
+    SystemDecorations="None"
+    TransparencyLevelHint="Transparent"
+    Background="Transparent"
+    CanResize="False"
+    WindowStartupLocation="CenterScreen">
 
-    <StackPanel Spacing="10" Margin="20">
-        <TextBlock Text="关于" FontWeight="Bold" />
-    </StackPanel>
+    <Panel>
+        <Border Background="{DynamicResource MenuFlyoutPresenterBackground}"
+            CornerRadius="10">
+            <Grid RowDefinitions="5*,*,150,*,3*,*,2*,3*,15*"
+                ColumnDefinitions="*,50*,*" Margin="10">
+                <DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"
+                    PointerPressed="TitleBar_PointerPressed">
+                    <StackPanel DockPanel.Dock="Left"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Spacing="10">
+                        <fluent:SymbolIcon Symbol="Info" FontSize="30" />
+                        <TextBlock Text="关于"
+                            VerticalAlignment="Center"
+                            FontSize="25"
+                            FontWeight="SemiBold" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Spacing="10"
+                        DockPanel.Dock="Right"
+                        FlowDirection="RightToLeft">
+                        <Button Click="CloseWindow"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                            <fluent:SymbolIcon Symbol="Dismiss" />
+                        </Button>
+                    </StackPanel>
+                </DockPanel>
+                <Image Grid.Column="1" Grid.Row="2"
+                    Source="/Assets/LunaPadIcon.png"
+                    Width="150" Height="150"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                </Image>
+                <TextBlock Grid.Column="1" Grid.Row="4"
+                    Text="LunaPad"
+                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                    FontWeight="ExtraBold"
+                    FontSize="32" />
+                <TextBlock Grid.Column="1" Grid.Row="6"
+                    Text="一款简洁的代码编辑器"
+                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                    FontWeight="Thin"
+                    FontSize="16" />
+                <Grid Grid.Column="1" Grid.Row="8"
+                    ColumnDefinitions="*"
+                    RowDefinitions="*,4*">
+                    <TextBlock Grid.Column="0" Grid.Row="0"
+                        Text="使用了以下开源组件："
+                        VerticalAlignment="Center" HorizontalAlignment="Left"
+                        FontSize="18" />
+                    <UniformGrid Grid.Row="1"
+                        Rows="2" Columns="3">
+                        <TextBlock Text="Avalonia"
+                            Classes="SmallItem" />
+                        <TextBlock Text="AvaloniaEdit"
+                            Classes="SmallItem" />
+                        <TextBlock Text="TextMateSharp"
+                            Classes="SmallItem" />
+                        <TextBlock Text="FluentAvaloniaUI"
+                            Classes="SmallItem" />
+                        <TextBlock Text="FluentIcons"
+                            Classes="SmallItem" />
+                    </UniformGrid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Panel>
 
 </UserControl>
