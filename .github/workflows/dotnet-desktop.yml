@@ -6,6 +6,11 @@ on:
   # 1. 当代码推送到 main 分支时
   push:
     branches: [ "main" ]
+    # 仅当更改的文件不全是文档时才触发
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - '.github/workflows/**'
     # 2. 当创建了 'v*.*.*' 格式的 tag 时 (例如 v1.0.0, v1.2.3)
     tags:
       - 'v*.*.*'
